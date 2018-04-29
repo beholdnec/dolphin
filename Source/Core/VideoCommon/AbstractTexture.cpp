@@ -87,12 +87,17 @@ size_t AbstractTexture::CalculateStrideForFormat(AbstractTextureFormat format, u
 {
   switch (format)
   {
+  case AbstractTextureFormat::I8:
+  case AbstractTextureFormat::AI4:
+    return static_cast<size_t>(row_length);
   case AbstractTextureFormat::DXT1:
     return static_cast<size_t>(std::max(1u, row_length / 4)) * 8;
   case AbstractTextureFormat::DXT3:
   case AbstractTextureFormat::DXT5:
   case AbstractTextureFormat::BPTC:
     return static_cast<size_t>(std::max(1u, row_length / 4)) * 16;
+  case AbstractTextureFormat::AI8:
+  case AbstractTextureFormat::RGB565:
   case AbstractTextureFormat::R16:
   case AbstractTextureFormat::D16:
     return static_cast<size_t>(row_length) * 2;
@@ -104,7 +109,7 @@ size_t AbstractTexture::CalculateStrideForFormat(AbstractTextureFormat format, u
   case AbstractTextureFormat::D32F_S8:
     return static_cast<size_t>(row_length) * 8;
   default:
-    PanicAlert("Unhandled texture format.");
+    PanicAlert("Unhandled texture format %d.", static_cast<int>(format));
     return 0;
   }
 }
@@ -113,12 +118,17 @@ size_t AbstractTexture::GetTexelSizeForFormat(AbstractTextureFormat format)
 {
   switch (format)
   {
+  case AbstractTextureFormat::I8:
+  case AbstractTextureFormat::AI4:
+    return 1;
   case AbstractTextureFormat::DXT1:
     return 8;
   case AbstractTextureFormat::DXT3:
   case AbstractTextureFormat::DXT5:
   case AbstractTextureFormat::BPTC:
     return 16;
+  case AbstractTextureFormat::AI8:
+  case AbstractTextureFormat::RGB565:
   case AbstractTextureFormat::R16:
   case AbstractTextureFormat::D16:
     return 2;
